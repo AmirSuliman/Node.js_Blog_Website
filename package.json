@@ -1,0 +1,24 @@
+{
+  "name": "node.js_bolg_website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmirSuliman/Node.js_Blog_Website.git"
+  },
+  "author": "Amir Suliman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmirSuliman/Node.js_Blog_Website/issues"
+  },
+  "homepage": "https://github.com/AmirSuliman/Node.js_Blog_Website#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "lodash": "^4.17.21"
+  }
+}
