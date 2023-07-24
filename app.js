@@ -17,6 +17,21 @@ const blogs = [
   {title: 'amir find starts', snippet: 'please complete authentication in your browser'}
 ];
 
+
+// middleware 
+/*
+  app.use((req, res, next) => {
+    console.log("New request made:");
+    console.log("Host:", req.hostname);
+    console.log("Path:", req.path);
+    console.log("Method:", req.method);
+    next();
+  });
+*/
+
+// another middleware  and static files
+app.use(exress.static('public'));
+
 // Different routes
 app.get('/', (req, res) => {
   res.render('index', { pageTitle: 'Home',  blogs });
