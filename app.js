@@ -1,22 +1,30 @@
 const exress = require('express');
+const mongoose = require('mongoose');
+const Blog = require('./models/blog');
 
 const app = exress();
 
-// Listen for a request
-app.listen(3000);
 
 // ejs templating engine 
 app.set('view engine', 'ejs');
 // views equal to views folder
 app.set('views', 'views');
 
-// blogs array to access dynamically in ejs files
-const blogs = [
-  {title: 'amir find starts', snippet: 'please complete authentication in your browser'},
-  {title: 'amir find starts', snippet: 'please complete authentication in your browser'},
-  {title: 'amir find starts', snippet: 'please complete authentication in your browser'}
-];
 
+// Mongodb connection
+const mdbURI = 'mongodb+srv://AmirSuliman:MyMongodbAtlas@amirblog.spdzvwd.mongodb.net/?retryWrites=true&w=majority'
+
+// connect to the data base
+// this is asynchornous so we need to add the .then() & .catch() methods
+mongoose.connect(mdbURI)
+  .then( data => {
+    // Listen for a request when mongodb is connected.
+    app.listen(3000);
+    // console.log("Connected successfuly.");
+  })
+  .catch(err => {
+    console.log("Faild to connect.");
+});
 
 // middleware 
 /*
@@ -32,9 +40,62 @@ const blogs = [
 // another middleware  and static files
 app.use(exress.static('public'));
 
+// mongoose and mongo sandbox routes
+// add new data to the Blog schema
+app.get('/add-blog', (req, res) => {
+  const blog = new Blog({
+    title: 'my new blog',
+    snippet: 'blog detials',
+    body: 'more blog deltials'
+  });
+
+  blog.save()
+    .then( result => {
+      res.send(result);
+    }).catch( error => {
+      console.log(error);
+    });
+});
+
+// get all the blogs from the collection
+/*
+  app.get('/all-blogs', (req, res) => {
+    Blog.find()
+      .then(result => {
+        res.send(result);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
+*/
+
+// get single blog
+/*
+  app.get('/single-blog', ( req, res ) => {
+    Blog.findById('64be9a60b652d05e2f136b89')
+      .then( result => {
+        res.send(result);
+      })
+      .catch( error => {
+        console.log(error);
+      });
+  });
+*/
+
 // Different routes
 app.get('/', (req, res) => {
-  res.render('index', { pageTitle: 'Home',  blogs });
+  res.redirect('/blogs');
+});
+
+app.get('/blogs', ( req, res ) => {
+  Blog.find()
+    .then(reslut => {
+      res.render('/blogs', { pageTitle: 'All Blogs', blogs: result })
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 app.get('/about', (req, res) => {
