@@ -11,9 +11,6 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 
-// Mongodb connection
-const mdbURI = 'mongodb+srv://AmirSuliman:MyMongodbAtlas@amirblog.spdzvwd.mongodb.net/?retryWrites=true&w=majority'
-
 // connect to the data base
 // this is asynchornous so we need to add the .then() & .catch() methods
 mongoose.connect(mdbURI)
