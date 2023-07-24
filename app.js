@@ -40,6 +40,10 @@ mongoose.connect(mdbURI)
 // another middleware  and static files
 app.use(exress.static('public'));
 
+// the below middleware is used to extract data from the post mthod body
+// if we don't specify this middleware the post body will be undefined
+app.use(exress.urlencoded({ extended: true }));  // {extended:true} is optional
+
 // mongoose and mongo sandbox routes
 // add new data to the Blog schema
 app.get('/add-blog', (req, res) => {
@@ -89,13 +93,54 @@ app.get('/', (req, res) => {
 });
 
 app.get('/blogs', ( req, res ) => {
-  Blog.find()
-    .then(reslut => {
-      res.render('/blogs', { pageTitle: 'All Blogs', blogs: result })
+  Blog.find().sort({createdAt: -1 })
+    .then(result => {
+      res.render('index', { pageTitle: 'All Blogs', blogs: result })
     })
     .catch(error => {
       console.log(error);
     });
+});
+
+app.post('/blogs', (req, res) => {
+  // we can also simply pass req.body to Blog() -> Blog(req.body)
+  const blog = new Blog({
+    title: req.body.title,
+    snippet: req.body.snippet,
+    body: req.body.body
+  });
+
+  blog.save()
+    .then(result => {
+      res.redirect('/blogs');
+    })
+    .catch(error => {
+      console.log(error);
+    });
+});
+
+// adding route parameters
+app.get('/blogs/:id', (req, res) => {
+  const id = req.params.id;
+  Blog.findById(id) 
+    .then(result => {
+      res.render('details', { pageTitle: 'Blog', blogs: result });
+    })
+    .catch(error => {
+      console.log(error);
+    })
+});
+
+app.delete('/blogs/:id', (req,res) => {
+  const id = req.params.id;
+
+  Blog.findByIdAndDelete(id)
+    .then(result => {
+      res.json({redirect: '/blogs'})
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
 
 app.get('/about', (req, res) => {

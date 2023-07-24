@@ -11,8 +11,10 @@
     <h2>All Blogs</h2>
     <% if (blogs.length > 0) { %>
       <% for ( blog of blogs ) { %>
-        <h3><%= blog.title %></h3>
-        <p><%= blog.snippet %></p>
+        <a href="/blogs/<%= blog._id %>">
+          <h3><%= blog.title %></h3>
+          <p><%= blog.snippet %></p>
+        </a>
       <% } %>
     <% } else { %>
       <p>No blogs to display</p>
